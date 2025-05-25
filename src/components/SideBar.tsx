@@ -19,9 +19,9 @@ const supportShapes = [
 ];
 
 const otherShapes = [
-  { name: "Behavior (Group Node)", icon: "🗂️", color: "#e0e0e0" }, // màu xám
-  { name: "Pivotal Event", icon: "⭐", color: "#ffdd88" }, // màu vàng đậm
-  { name: "Arrow", icon: "➡️", color: "#888888" }, // màu xám đậm
+  { name: "Behavior (Group Node)", icon: "🗂️", color: "#e0e0e0", isGroup: true }, // Group type flag
+  { name: "Pivotal Event", icon: "⭐", color: "#ffdd88" },
+  { name: "Arrow", icon: "➡️", color: "#888888" },
 ];
 
 type SideBarProps = {
@@ -30,10 +30,21 @@ type SideBarProps = {
 };
 
 function SideBar({ dark, toggleTheme }: SideBarProps) {
-  const { addNode } = useDiagram();
+  const { addNode, selectedNodes, createBehaviorGroup } = useDiagram();
   
-  const handleShapeClick = (shape: { name: string; icon: string; color: string }) => {
-    // Create a normalized nodeType from the name
+  const handleShapeClick = (shape: { name: string; icon: string; color: string; isGroup?: boolean }) => {
+    // Special handling for Behavior Group
+    if (shape.isGroup) {
+      if (selectedNodes.length >= 2) {
+        createBehaviorGroup();
+      } else {
+        // Show a message that at least 2 nodes must be selected
+        alert("Please select at least 2 nodes to create a behavior group");
+      }
+      return;
+    }
+    
+    // Normal handling for other node types
     const nodeType = shape.name.toLowerCase().replace(/ /g, '-');
     
     addNode({

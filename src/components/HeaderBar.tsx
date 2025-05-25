@@ -18,7 +18,8 @@ function HeaderBar({ setStatus }: HeaderBarProps) {
     nodes, 
     updateNodePositions, 
     selectedNodes, 
-    deleteSelectedNodes 
+    deleteSelectedNodes,
+    duplicateSelectedNodes
   } = useDiagram();
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const [lastAction, setLastAction] = useState<string | null>(null);
@@ -207,6 +208,16 @@ function HeaderBar({ setStatus }: HeaderBarProps) {
     }
   };
 
+  // Handle duplicate button click
+  const handleDuplicate = () => {
+    if (selectedNodes.length > 0) {
+      const duplicatedIds = duplicateSelectedNodes(selectedNodes);
+      if (duplicatedIds && duplicatedIds.length > 0) {
+        setLastAction(`Duplicated ${selectedNodes.length} node${selectedNodes.length > 1 ? 's' : ''}`);
+      }
+    }
+  };
+
   // Add keyboard event listener for shortcuts
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -234,13 +245,21 @@ function HeaderBar({ setStatus }: HeaderBarProps) {
         event.preventDefault();
         handleAutoAlign();
       }
+      
+      // Check for Ctrl+D for duplicate
+      if ((event.ctrlKey || event.metaKey) && event.key === 'd') {
+        event.preventDefault(); // Prevent browser's bookmark dialog
+        if (selectedNodes.length > 0) {
+          handleDuplicate();
+        }
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [canUndo, canRedo, nodes]); // Add nodes as dependency
+  }, [canUndo, canRedo, nodes, selectedNodes]); // Add selectedNodes as dependency
 
   // Handle delete button click
   const handleDelete = () => {
@@ -294,7 +313,19 @@ function HeaderBar({ setStatus }: HeaderBarProps) {
           <span role="img" aria-label="Auto-Align">📐</span>
         </button>
         
-        {/* Add delete button */}
+        {/* Add duplicate button */}
+        <button
+          className="header-icon-btn"
+          title="Duplicate Selected (Ctrl+D)"
+          aria-label="Duplicate Selected"
+          onClick={handleDuplicate}
+          disabled={selectedNodes.length === 0}
+          style={selectedNodes.length === 0 ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+        >
+          <span role="img" aria-label="Duplicate">📋</span>
+        </button>
+        
+        {/* Delete button */}
         <button
           className="header-icon-btn"
           title="Delete Selected (Delete)"

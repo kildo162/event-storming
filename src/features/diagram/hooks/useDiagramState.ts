@@ -308,6 +308,59 @@ export function useDiagramState() {
     [nodeIdCounter, recordHistory, selectedNodes],
   );
 
+  // Add a function to duplicate selected nodes
+  const duplicateSelectedNodes = useCallback((nodesToDuplicate: Node[]) => {
+    if (nodesToDuplicate.length === 0) return;
+
+    // Create new node IDs for duplicated nodes
+    const newNodes: Node[] = [];
+    const offset = { x: 30, y: 30 }; // Offset for duplicated nodes
+
+    // Create duplicates with new IDs
+    nodesToDuplicate.forEach(node => {
+      const newId = `node_${nodeIdCounter + newNodes.length}`;
+      
+      // Create a deep copy of the node with new ID and offset position
+      const duplicatedNode: Node = {
+        ...node,
+        id: newId,
+        selected: true, // Select the duplicated node
+        position: {
+          x: node.position.x + offset.x,
+          y: node.position.y + offset.y
+        }
+      };
+      
+      // Push to new nodes array
+      newNodes.push(duplicatedNode);
+    });
+
+    // Update nodes state - deselect current nodes and add new ones
+    setNodes(prevNodes => {
+      // Deselect all existing nodes
+      const deselectNodes = prevNodes.map(n => ({
+        ...n,
+        selected: false
+      }));
+      
+      // Return array with all existing nodes (deselected) + new duplicated nodes (selected)
+      return [...deselectNodes, ...newNodes];
+    });
+    
+    // Update selected nodes state
+    setSelectedNodes(newNodes);
+    
+    // Increment the node counter
+    setNodeIdCounter(prev => prev + newNodes.length);
+    
+    // Record this operation in history
+    setTimeout(() => {
+      recordHistory(true);
+    }, 0);
+    
+    return newNodes.map(n => n.id);
+  }, [nodeIdCounter, recordHistory]);
+
   // Undo function
   const undo = useCallback(() => {
     if (canUndo) {
@@ -454,6 +507,74 @@ export function useDiagramState() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedNodes, deleteSelectedNodes]);
 
+  // Add a function to create a behavior group from selected nodes
+  const createBehaviorGroup = useCallback(() => {
+    if (selectedNodes.length < 2) {
+      console.warn("Need at least 2 nodes to create a behavior group");
+      return null;
+    }
+
+    // Create a group ID
+    const id = `group_${nodeIdCounter}`;
+
+    // Get positions of all selected nodes to calculate group dimensions
+    const nodePositions = selectedNodes.map(node => ({
+      x: node.position.x,
+      y: node.position.y,
+      width: node.type === 'eventStormingNode' && 
+        (node.data?.nodeType === 'consistent-business-rule' || 
+          node.data?.label === 'Consistent Business Rule') ? 240 : 120,
+      height: 120
+    }));
+
+    // Calculate min/max coordinates to determine group dimensions
+    const minX = Math.min(...nodePositions.map(pos => pos.x));
+    const minY = Math.min(...nodePositions.map(pos => pos.y));
+    const maxX = Math.max(...nodePositions.map(pos => pos.x + pos.width));
+    const maxY = Math.max(...nodePositions.map(pos => pos.y + pos.height));
+
+    // Create group node with extra padding (8px) around the contained nodes
+    const padding = 16; // 8px padding on each side, for a total of 16px
+    const newGroup = {
+      id,
+      type: 'groupNode',
+      data: { 
+        label: 'Behavior',
+        icon: '🗂️',
+        color: '#e0e0e0',
+        textColor: '#000000',
+        childNodeIds: selectedNodes.map(node => node.id)
+      },
+      position: {
+        x: minX - padding,
+        y: minY - padding - 8, // Extra space for the title
+      },
+      style: {
+        width: (maxX - minX) + padding * 2,  // Add padding on both sides
+        height: (maxY - minY) + padding * 2, // Add padding on both sides
+      },
+      selected: true,
+      zIndex: -1, // Ensure groups are behind regular nodes
+    };
+
+    // Don't deselect the nodes when creating a group - keep everything selected
+    setNodes(prevNodes => {
+      return [...prevNodes, newGroup];
+    });
+    
+    // Add group to selected nodes while keeping existing selections
+    setSelectedNodes(prev => [...prev, newGroup as Node]);
+    
+    setNodeIdCounter(prev => prev + 1);
+    
+    // Record this operation in history
+    setTimeout(() => {
+      recordHistory(true);
+    }, 0);
+    
+    return id;
+  }, [selectedNodes, nodeIdCounter, recordHistory]);
+
   // Return the public API
   return {
     nodes,
@@ -470,6 +591,8 @@ export function useDiagramState() {
     canRedo,
     updateNodePositions,
     selectedNodes,
-    deleteSelectedNodes // Add this to the returned object
+    deleteSelectedNodes,
+    duplicateSelectedNodes,
+    createBehaviorGroup // Add this to the returned object
   };
 }

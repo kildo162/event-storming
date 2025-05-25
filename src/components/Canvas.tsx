@@ -16,10 +16,12 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import { useDiagram } from "../features/diagram/DiagramContext";
 import EventStormingNode from "./EventStormingNode";
+import GroupNode from "./GroupNode";
 
 // Define custom node types
 const nodeTypes: NodeTypes = {
   eventStormingNode: EventStormingNode,
+  groupNode: GroupNode,
 };
 
 // Snap grid settings
@@ -57,6 +59,21 @@ function Canvas() {
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
     return () => observer.disconnect();
+  }, []);
+
+  // Add keyboard shortcut for toggling tools
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // 'V' key for select tool, 'H' key for hand tool
+      if (event.key === 'v' || event.key === 'V') {
+        setActiveTool('select');
+      } else if (event.key === 'h' || event.key === 'H') {
+        setActiveTool('hand');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   // Handle selection changes to determine start/end of node interactions
@@ -256,6 +273,7 @@ function Canvas() {
         selectionKeyCode={flowConfig.selectionKeyCode}
         multiSelectionKeyCode={flowConfig.multiSelectionKeyCode}
         deleteKeyCode={flowConfig.deleteKeyCode}
+        data-tool={activeTool} // Add data attribute for CSS selection
       >
         <Background 
           color={bgColor} 
@@ -330,20 +348,5 @@ function Canvas() {
     </div>
   );
 }
-
-// Add keyboard shortcut for toggling tools
-useEffect(() => {
-  const handleKeyDown = (event: KeyboardEvent) => {
-    // 'V' key for select tool, 'H' key for hand tool
-    if (event.key === 'v' || event.key === 'V') {
-      setActiveTool('select');
-    } else if (event.key === 'h' || event.key === 'H') {
-      setActiveTool('hand');
-    }
-  };
-
-  window.addEventListener('keydown', handleKeyDown);
-  return () => window.removeEventListener('keydown', handleKeyDown);
-}, []);
 
 export default Canvas;

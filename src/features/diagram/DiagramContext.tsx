@@ -18,6 +18,8 @@ interface DiagramContextProps {
   updateNodePositions: (updates: { id: string; position: { x: number; y: number } }[]) => void;
   selectedNodes: Node[];
   deleteSelectedNodes: (nodes: Node[]) => void;
+  duplicateSelectedNodes: (nodes: Node[]) => string[] | undefined;
+  createBehaviorGroup: () => string | null;
 }
 
 const DiagramContext = createContext<DiagramContextProps | undefined>(undefined);
@@ -42,7 +44,9 @@ export function DiagramProvider({ children }: DiagramProviderProps) {
     canRedo,
     updateNodePositions,
     selectedNodes,
-    deleteSelectedNodes
+    deleteSelectedNodes,
+    duplicateSelectedNodes,
+    createBehaviorGroup
   } = useDiagramState();
   
   return (
@@ -61,7 +65,9 @@ export function DiagramProvider({ children }: DiagramProviderProps) {
       canRedo,
       updateNodePositions,
       selectedNodes,
-      deleteSelectedNodes
+      deleteSelectedNodes,
+      duplicateSelectedNodes,
+      createBehaviorGroup
     }}>
       {children}
     </DiagramContext.Provider>
