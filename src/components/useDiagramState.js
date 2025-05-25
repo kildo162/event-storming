@@ -1,17 +1,8 @@
-import React, { useRef, useState, useCallback } from 'react';
-import ReactFlow, {
-  addEdge,
-  MiniMap,
-  Controls,
-  Background,
-  useNodesState,
-  useEdgesState
-} from 'reactflow';
-import 'reactflow/dist/style.css';
+import { useRef, useState, useCallback, useEffect } from 'react';
+import { useNodesState, useEdgesState } from 'reactflow';
 import initialNodes from '../data/initialNodes';
 import initialEdges from '../data/initialEdges';
 import { saveToLocalStorage, loadFromLocalStorage } from '../utils/localStorage';
-import EditableNode from './EditableNode';
 
 const useDiagramState = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -21,7 +12,7 @@ const useDiagramState = () => {
   const idRef = useRef(9);
 
   // Save to localStorage and history
-  React.useEffect(() => {
+  useEffect(() => {
     const data = { nodes, edges };
     saveToLocalStorage('es-ide-diagram', data);
     setHistory((prev) => {
@@ -32,7 +23,7 @@ const useDiagramState = () => {
   }, [nodes, edges]);
 
   // Restore from localStorage
-  React.useEffect(() => {
+  useEffect(() => {
     const data = loadFromLocalStorage('es-ide-diagram');
     if (data) {
       try {
@@ -46,7 +37,7 @@ const useDiagramState = () => {
   }, []);
 
   // Undo/Redo
-  const handleUndo = () => {
+  const handleUndo = useCallback(() => {
     setHistory((prev) => {
       if (prev.length <= 1) return prev;
       setFuture((f) => [{ nodes, edges }, ...f]);
@@ -55,8 +46,9 @@ const useDiagramState = () => {
       setEdges(last.edges);
       return prev.slice(0, -1);
     });
-  };
-  const handleRedo = () => {
+  }, [nodes, edges]);
+
+  const handleRedo = useCallback(() => {
     setFuture((f) => {
       if (f.length === 0) return f;
       const next = f[0];
@@ -65,22 +57,23 @@ const useDiagramState = () => {
       setHistory((h) => [...h, next]);
       return f.slice(1);
     });
-  };
+  }, [setNodes, setEdges]);
 
   // Clear
-  const handleClearCanvas = () => {
+  const handleClearCanvas = useCallback(() => {
     setNodes(initialNodes);
     setEdges(initialEdges);
     setHistory([]);
     setFuture([]);
     saveToLocalStorage('es-ide-diagram', { nodes: initialNodes, edges: initialEdges });
-  };
-  const handleClearLocalStorage = () => {
+  }, []);
+
+  const handleClearLocalStorage = useCallback(() => {
     saveToLocalStorage('es-ide-diagram', null);
-  };
+  }, []);
 
   // Add node by drop
-  const getNodeStyle = (component) => {
+  const getNodeStyle = useCallback((component) => {
     if (component.label === 'Aggregate') {
       return {
         background: component.color,
@@ -119,7 +112,7 @@ const useDiagramState = () => {
       whiteSpace: 'nowrap',
       color: component.type === 'hotspot' ? '#fff' : '#222',
     };
-  };
+  }, []);
 
   const onDrop = useCallback(
     (event) => {
@@ -143,7 +136,7 @@ const useDiagramState = () => {
       };
       setNodes((nds) => nds.concat(newNode));
     },
-    [setNodes]
+    [setNodes, getNodeStyle]
   );
 
   return {
