@@ -1,0 +1,242 @@
+const initialNodes = [{
+  id: '1',
+  type: 'default',
+  position: {
+    x: 40,
+    y: 120
+  },
+  data: {
+    label: 'Department Home Page'
+  },
+  sourcePosition: 'right',
+  targetPosition: 'left',
+  style: {
+    background: '#fff',
+    border: '2px solid #ccc',
+    borderRadius: 4,
+    height: 96,
+    minWidth: 96,
+    width: 96,
+    aspectRatio: '1/1',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontWeight: 600,
+    fontSize: 16,
+    padding: '0 8px',
+    boxSizing: 'border-box',
+    whiteSpace: 'nowrap',
+    color: '#222'
+  }
+}, {
+  id: '2',
+  type: 'default',
+  position: {
+    x: 160,
+    y: 120
+  },
+  data: {
+    label: 'ADMIN'
+  },
+  sourcePosition: 'right',
+  targetPosition: 'left',
+  style: {
+    background: '#FFF2CC',
+    border: '2px solid #B59F3B',
+    borderRadius: 4,
+    height: 96,
+    minWidth: 96,
+    width: 96,
+    aspectRatio: '1/1',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontWeight: 600,
+    fontSize: 16,
+    padding: '0 8px',
+    boxSizing: 'border-box',
+    whiteSpace: 'nowrap',
+    color: '#222'
+  }
+}, {
+  id: '3',
+  type: 'default',
+  position: {
+    x: 280,
+    y: 120
+  },
+  data: {
+    label: 'Create Department Dialog'
+  },
+  sourcePosition: 'right',
+  targetPosition: 'left',
+  style: {
+    background: '#fff',
+    border: '2px solid #ccc',
+    borderRadius: 4,
+    height: 96,
+    minWidth: 96,
+    width: 96,
+    aspectRatio: '1/1',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontWeight: 600,
+    fontSize: 16,
+    padding: '0 8px',
+    boxSizing: 'border-box',
+    whiteSpace: 'nowrap',
+    color: '#222'
+  }
+}, {
+  id: '4',
+  type: 'default',
+  position: {
+    x: 400,
+    y: 120
+  },
+  data: {
+    label: 'ADMIN'
+  },
+  sourcePosition: 'right',
+  targetPosition: 'left',
+  style: {
+    background: '#FFF2CC',
+    border: '2px solid #B59F3B',
+    borderRadius: 4,
+    height: 96,
+    minWidth: 96,
+    width: 96,
+    aspectRatio: '1/1',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontWeight: 600,
+    fontSize: 16,
+    padding: '0 8px',
+    boxSizing: 'border-box',
+    whiteSpace: 'nowrap',
+    color: '#222'
+  }
+}, {
+  id: '5',
+  type: 'default',
+  position: {
+    x: 520,
+    y: 120
+  },
+  data: {
+    label: 'Create Department'
+  },
+  sourcePosition: 'right',
+  targetPosition: 'left',
+  style: {
+    background: '#6FA8DC',
+    border: '2px solid #3C78D8',
+    borderRadius: 4,
+    height: 96,
+    minWidth: 96,
+    width: 96,
+    aspectRatio: '1/1',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontWeight: 600,
+    fontSize: 16,
+    padding: '0 8px',
+    boxSizing: 'border-box',
+    whiteSpace: 'nowrap',
+    color: '#222'
+  }
+}, {
+  id: '6',
+  type: 'default',
+  position: {
+    x: 640,
+    y: 120
+  },
+  data: {
+    label: 'ADMIN'
+  },
+  sourcePosition: 'right',
+  targetPosition: 'left',
+  style: {
+    background: '#FFF2CC',
+    border: '2px solid #B59F3B',
+    borderRadius: 4,
+    height: 96,
+    minWidth: 96,
+    width: 96,
+    aspectRatio: '1/1',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontWeight: 600,
+    fontSize: 16,
+    padding: '0 8px',
+    boxSizing: 'border-box',
+    whiteSpace: 'nowrap',
+    color: '#222'
+  }
+}, {
+  id: '7',
+  type: 'default',
+  position: {
+    x: 760,
+    y: 120
+  },
+  data: {
+    label: 'Create Department'
+  },
+  sourcePosition: 'right',
+  targetPosition: 'left',
+  style: {
+    background: '#6FA8DC',
+    border: '2px solid #3C78D8',
+    borderRadius: 4,
+    height: 96,
+    minWidth: 96,
+    width: 96,
+    aspectRatio: '1/1',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontWeight: 600,
+    fontSize: 16,
+    padding: '0 8px',
+    boxSizing: 'border-box',
+    whiteSpace: 'nowrap',
+    color: '#222'
+  }
+}, {
+  id: '8',
+  type: 'default',
+  position: {
+    x: 880,
+    y: 120
+  },
+  data: {
+    label: 'Department Created'
+  },
+  sourcePosition: 'right',
+  targetPosition: 'left',
+  style: {
+    background: '#FFA500',
+    border: '2px solid #C97A00',
+    borderRadius: 4,
+    height: 96,
+    minWidth: 96,
+    width: 96,
+    aspectRatio: '1/1',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontWeight: 600,
+    fontSize: 16,
+    padding: '0 8px',
+    boxSizing: 'border-box',
+    whiteSpace: 'nowrap',
+    color: '#222'
+  }
+}];
+export default initialNodes;
