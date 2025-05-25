@@ -1,0 +1,91 @@
+/* Status bar styles */
+.status-bar {
+  height: 30px;
+  min-height: 30px;
+  max-height: 30px;
+  flex: 0 0 30px;
+  background: #23272f;
+  color: #bdbdbd;
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+  font-size: 0.98rem;
+  border-top: 1.5px solid #d1d5db;
+  z-index: 20;
+  box-shadow: 0 -1px 0 #d1d5db;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.status-left, .status-right, .status-center {
+  display: flex;
+  align-items: center;
+}
+
+.status-node-count {
+  font-size: 0.9rem;
+  color: #bdbdbd;
+  display: flex;
+  align-items: center;
+}
+
+.node-count-label {
+  margin-right: 4px;
+  color: #777;
+}
+
+.status-history-btn {
+  background: transparent;
+  color: #bdbdbd;
+  border: none;
+  width: 24px;
+  height: 24px;
+  font-size: 1rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.status-history-btn:hover {
+  background: #31363f;
+  color: #fff;
+}
+
+.status-text {
+  font-size: 0.9rem;
+}
+
+.status-ready {
+  color: #bdbdbd;
+}
+
+.status-saving {
+  color: #ffab40;
+  animation: pulse 1.5s infinite;
+}
+
+.status-saved {
+  color: #66bb6a;
+  font-weight: 500;
+}
+
+/* Dark mode specific */
+@media (prefers-color-scheme: dark) {
+  .status-bar {
+    background: #1e2025;
+    border-top-color: #3a3f48;
+  }
+  
+  .status-left, .status-right, .status-center {
+    color: #bdbdbd;
+  }
+  
+  .status-history-btn {
+    color: #bdbdbd;
+  }
+}

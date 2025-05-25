@@ -1,0 +1,31 @@
+/* Theme-specific styles */
+
+/* Dark mode */
+[data-theme="dark"] {
+  color-scheme: dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+}
+
+[data-theme="dark"] .canvas-area {
+  background: #1e2025;
+}
+
+/* Light mode */
+[data-theme="light"] {
+  color-scheme: light;
+  color: #213547;
+  background-color: #ffffff;
+}
+
+[data-theme="light"] a:hover {
+  color: #747bff;
+}
+
+[data-theme="light"] button {
+  background-color: #f9f9f9;
+}
+
+[data-theme="light"] .canvas-area {
+  background: #f5f7fa;
+}

@@ -1,0 +1,21 @@
+/* Main layout structure */
+.App {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.main-area {
+  flex: 1;
+  min-width: 0; /* Allow to shrink */
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Adjust calculations for node positioning in useDiagramState.ts if you have any centerX calculations 
+   that depend on the sidebar width */
+
+/* Remove potentially conflicting ReactFlow control styles that were previously here */

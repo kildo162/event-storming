@@ -1,0 +1,321 @@
+/* Canvas specific styles */
+.canvas-area {
+  position: relative;
+  flex: 1;
+  min-height: 0; /* Allow to shrink */
+  width: 100%;
+  background: #fff;
+}
+
+.canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ReactFlow specific overrides */
+.react-flow {
+  width: 100%;
+  height: 100%;
+}
+
+/* Fix controls positioning and styling - remove extending background */
+.react-flow__controls {
+  bottom: 20px !important;
+  right: 20px !important;
+  border-radius: 6px !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
+  background: transparent !important; /* Change from white to transparent */
+  padding: 0 !important; /* Remove padding */
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  z-index: 10 !important;
+}
+
+/* Style individual control buttons instead of the container */
+.react-flow__controls-button {
+  background: white !important; /* Move background to individual buttons */
+  border: none !important;
+  border-radius: 4px !important;
+  width: 26px !important;
+  height: 26px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background 0.2s ease !important;
+  color: #555 !important;
+  outline: none !important;
+  margin: 0 !important; /* Remove margins */
+  padding: 4px !important; /* Add padding to buttons */
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1) !important; /* Add shadow to buttons */
+}
+
+.react-flow__controls-button:hover {
+  background: #e9ecef !important;
+}
+
+.react-flow__controls-button svg {
+  width: 14px !important;
+  height: 14px !important;
+  fill: currentColor !important;
+}
+
+/* Override minimap styling */
+.react-flow__minimap {
+  bottom: 20px !important;
+  left: 20px !important;
+  width: 160px !important;
+  height: 100px !important;
+  border-radius: 6px !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Background grid styling */
+.react-flow__background {
+  opacity: 0.5 !important; /* Make the dots more visible */
+}
+
+.react-flow__background-pattern {
+  stroke-width: 1 !important; /* Ensure dot size is consistent */
+}
+
+/* Custom styling for selection box */
+.react-flow__selection {
+  background-color: rgba(33, 150, 243, 0.08) !important;
+  border: 2px dashed rgba(33, 150, 243, 0.8) !important;
+  border-radius: 4px !important;
+  z-index: 5 !important;
+}
+
+/* Enhanced selection styling */
+.react-flow__node.selected {
+  z-index: 10 !important; /* Ensure selected nodes appear on top */
+}
+
+/* Highlight direct selections differently than lasso selections */
+.react-flow__node.selected:not(.selected-via-lasso) {
+  animation: node-select-pulse 1.5s ease-in-out 1;
+}
+
+@keyframes node-select-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7); }
+  50% { box-shadow: 0 0 0 10px rgba(33, 150, 243, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0); }
+}
+
+/* Styling for the canvas instructions */
+.canvas-instructions {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #333;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  z-index: 5;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  opacity: 0.7;
+}
+
+.canvas-container:hover .canvas-instructions {
+  opacity: 0.3;
+}
+
+.instruction-item {
+  margin: 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.instruction-key {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+/* Tool switcher styles */
+.canvas-tool-switcher {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 5px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 6px;
+  padding: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  z-index: 20;
+}
+
+.tool-btn {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  font-size: 18px;
+}
+
+.tool-btn.active {
+  background-color: #e1f5fe;
+  border-color: #29b6f6;
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.3);
+}
+
+.tool-btn:hover:not(.active) {
+  background-color: #e9e9e9;
+}
+
+/* Enhanced canvas instructions */
+.canvas-instructions {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #333;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  z-index: 5;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  min-width: 180px;
+  opacity: 0.9;
+}
+
+.canvas-container:hover .canvas-instructions {
+  opacity: 0.5;
+}
+
+.canvas-instructions:hover {
+  opacity: 0.9 !important;
+}
+
+.tool-indicator {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+}
+
+.current-tool-icon {
+  font-size: 16px;
+  margin-right: 6px;
+}
+
+.current-tool-name {
+  font-weight: 600;
+  color: #2196f3;
+}
+
+/* Change cursor based on tool */
+.react-flow__pane {
+  cursor: default;
+}
+
+.react-flow[data-tool="hand"] .react-flow__pane {
+  cursor: grab;
+}
+
+.react-flow[data-tool="hand"] .react-flow__pane:active {
+  cursor: grabbing;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .canvas-area {
+    background: #1e2025;
+  }
+  
+  .react-flow__controls {
+    background: #23272f !important;
+  }
+  
+  .react-flow__controls-button {
+    background: #31363f !important;
+    color: #e0e0e0 !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.25) !important;
+  }
+  
+  .react-flow__controls-button:hover {
+    background: #3f4652 !important;
+  }
+  
+  .react-flow__minimap {
+    background: rgba(35, 39, 47, 0.8) !important;
+  }
+  
+  .react-flow__background {
+    opacity: 0.3 !important; /* Adjusted for dark mode */
+  }
+  
+  .canvas-instructions {
+    background-color: rgba(35, 39, 47, 0.85);
+    color: #e0e0e0;
+  }
+  
+  .instruction-key {
+    background-color: #31363f;
+    border-color: #40454f;
+    color: #e0e0e0;
+  }
+  
+  .react-flow__selection {
+    background-color: rgba(33, 150, 243, 0.1) !important;
+    border-color: rgba(33, 150, 243, 0.7) !important;
+  }
+  
+  .canvas-tool-switcher {
+    background-color: rgba(35, 39, 47, 0.85);
+  }
+  
+  .tool-btn {
+    background-color: #31363f;
+    border-color: #3a3f48;
+    color: #e0e0e0;
+  }
+  
+  .tool-btn.active {
+    background-color: #1a3747;
+    border-color: #0288d1;
+  }
+  
+  .tool-btn:hover:not(.active) {
+    background-color: #3f4652;
+  }
+  
+  .canvas-instructions {
+    background-color: rgba(35, 39, 47, 0.85);
+    color: #e0e0e0;
+  }
+  
+  .tool-indicator {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .current-tool-name {
+    color: #29b6f6;
+  }
+}

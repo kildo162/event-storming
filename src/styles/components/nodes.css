@@ -1,0 +1,91 @@
+/* Styles for Event Storming nodes */
+.event-storming-node {
+  aspect-ratio: 1 / 1; /* Default square aspect ratio (1x1) */
+  transition: all 0.2s ease;
+  cursor: move; /* Add move cursor to indicate nodes can be dragged */
+}
+
+.event-storming-node.wide-node {
+  aspect-ratio: 2 / 1; /* Wide aspect ratio (2x1) for Business Rules */
+}
+
+/* Selected node styling */
+.event-storming-node.selected {
+  z-index: 10; /* Bring selected nodes to front */
+}
+
+/* Selection indicators - the V shapes at corners */
+.selection-indicator {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #2196f3; /* Blue color for selection */
+  border-radius: 0;
+  box-sizing: border-box;
+  pointer-events: none; /* Don't interfere with node interactions */
+  z-index: 5;
+}
+
+/* Top-left corner */
+.selection-indicator.top-left {
+  top: -2px;
+  left: -2px;
+  border-right: none;
+  border-bottom: none;
+}
+
+/* Top-right corner */
+.selection-indicator.top-right {
+  top: -2px;
+  right: -2px;
+  border-left: none;
+  border-bottom: none;
+}
+
+/* Bottom-left corner */
+.selection-indicator.bottom-left {
+  bottom: -2px;
+  left: -2px;
+  border-right: none;
+  border-top: none;
+}
+
+/* Bottom-right corner */
+.selection-indicator.bottom-right {
+  bottom: -2px;
+  right: -2px;
+  border-left: none;
+  border-top: none;
+}
+
+/* Add some subtle animation for newly selected nodes */
+.event-storming-node.selected {
+  animation: select-pulse 0.5s ease-out;
+}
+
+@keyframes select-pulse {
+  0% { box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.8), 0 2px 5px rgba(0, 0, 0, 0.15); }
+  50% { box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.4), 0 2px 5px rgba(0, 0, 0, 0.15); }
+  100% { box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.8), 0 2px 5px rgba(0, 0, 0, 0.15); }
+}
+
+/* Show alignment guides when nodes are being dragged */
+.react-flow__node.dragging {
+  z-index: 10;
+}
+
+/* Add snapping effect - subtle highlight when node is snapped */
+.react-flow__node.snapped {
+  box-shadow: 0 0 0 2px rgba(255, 255, 0, 0.5);
+}
+
+/* Node type-specific styles can be added here */
+.event-storming-node.actor {
+  /* Actor-specific styling */
+}
+
+.event-storming-node.action {
+  /* Action-specific styling */
+}
+
+/* and so on for other node types... */

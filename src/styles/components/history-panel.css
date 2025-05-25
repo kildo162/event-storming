@@ -1,0 +1,181 @@
+/* History Panel Styles */
+.history-panel {
+  position: absolute;
+  bottom: 32px;
+  right: 10px;
+  width: 320px;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-height: 60vh;
+  border: 1px solid #e0e0e0;
+  outline: none;
+}
+
+.history-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #f5f7fa;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.history-panel-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #213547;
+}
+
+.history-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  color: #777;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 4px;
+}
+
+.history-close-btn:hover {
+  background: #e9ecef;
+}
+
+.history-panel-content {
+  padding: 12px 16px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.history-section {
+  margin-bottom: 16px;
+}
+
+.history-section h4 {
+  margin: 0 0 8px 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 120px;
+  overflow-y: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+.history-item, .history-item-empty {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.history-item:last-child, .history-item-empty:last-child {
+  border-bottom: none;
+}
+
+.history-item-empty {
+  color: #999;
+  font-style: italic;
+}
+
+.history-current {
+  padding: 8px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.history-panel-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 16px;
+  background: #f5f7fa;
+  border-top: 1px solid #e0e0e0;
+  gap: 10px;
+}
+
+.history-btn {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: #fff;
+  color: #374151;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.history-btn:hover:not(:disabled) {
+  background: #f8f9fa;
+  border-color: #c1c7d0;
+}
+
+.history-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.history-no-data {
+  color: #999;
+  font-style: italic;
+  text-align: center;
+  padding: 20px 0;
+}
+
+/* Dark mode specific */
+@media (prefers-color-scheme: dark) {
+  .history-panel {
+    background: #1e2025;
+    border-color: #2c2f36;
+  }
+  
+  .history-panel-header, .history-panel-footer {
+    background: #23272f;
+    border-color: #2c2f36;
+  }
+  
+  .history-panel-header h3 {
+    color: #fff;
+  }
+  
+  .history-section h4 {
+    color: #bdbdbd;
+  }
+  
+  .history-list, .history-current {
+    border-color: #2c2f36;
+  }
+  
+  .history-item {
+    border-color: #2c2f36;
+    color: #e0e0e0;
+  }
+  
+  .history-close-btn:hover {
+    background: #31363f;
+  }
+  
+  .history-btn {
+    background: #31363f;
+    border-color: #2c2f36;
+    color: #e0e0e0;
+  }
+  
+  .history-btn:hover:not(:disabled) {
+    background: #3f4652;
+  }
+}
