@@ -9,7 +9,8 @@ interface GroupNodeData {
   childNodeIds: string[];
 }
 
-function GroupNode({ data, isConnectable, selected }: NodeProps<GroupNodeData>) {
+function GroupNode({ data, isConnectable, selected, style: nodeStyle }: NodeProps<GroupNodeData> & { style?: React.CSSProperties }) {
+
   return (
     <div
       className={`group-node ${selected ? 'selected' : ''}`}
@@ -17,13 +18,12 @@ function GroupNode({ data, isConnectable, selected }: NodeProps<GroupNodeData>) 
         background: 'transparent',
         border: `2px dashed ${data.color}`,
         borderRadius: '8px',
-        padding: '8px',
+        padding: '20px',
         position: 'relative',
-        minWidth: 150,
-        minHeight: 150,
-        width: 150,
-        height: 150,
+        minWidth: '180px',
+        minHeight: '140px',
         boxSizing: 'border-box',
+        ...nodeStyle, // Áp dụng style từ node props
       }}
     >
       {/* Selection indicators - only show when selected */}
@@ -41,11 +41,19 @@ function GroupNode({ data, isConnectable, selected }: NodeProps<GroupNodeData>) 
         type="source"
         position={Position.Left}
         id="left"
-        style={{ 
+        style={{
           background: data.color,
           width: '12px',
           height: '12px',
-          border: '2px solid #fff'
+          border: '2px solid #fff',
+          opacity: 0.8,
+          transition: 'opacity 0.2s ease'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.opacity = '1';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.opacity = '0.8';
         }}
         isConnectable={isConnectable}
       />
@@ -55,11 +63,19 @@ function GroupNode({ data, isConnectable, selected }: NodeProps<GroupNodeData>) 
         type="source"
         position={Position.Right}
         id="right"
-        style={{ 
+        style={{
           background: data.color,
           width: '12px',
           height: '12px',
-          border: '2px solid #fff'
+          border: '2px solid #fff',
+          opacity: 0.8,
+          transition: 'opacity 0.2s ease'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.opacity = '1';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.opacity = '0.8';
         }}
         isConnectable={isConnectable}
       />
@@ -68,19 +84,20 @@ function GroupNode({ data, isConnectable, selected }: NodeProps<GroupNodeData>) 
       <div className="group-header"
         style={{
           position: 'absolute',
-          top: '-22px',
+          top: '-28px',
           left: '10px',
           background: data.color,
           color: data.textColor,
-          padding: '0 8px',
+          padding: '4px 12px',
           borderTopLeftRadius: '4px',
           borderTopRightRadius: '4px',
-          fontSize: '12px',
+          fontSize: '13px',
           lineHeight: '20px',
           fontWeight: 'bold',
           display: 'flex',
           alignItems: 'center',
-          gap: '4px'
+          gap: '6px',
+          boxShadow: '0 -1px 3px rgba(0,0,0,0.1)'
         }}
       >
         <span style={{ fontSize: '14px' }}>{data.icon}</span>

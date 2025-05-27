@@ -1,24 +1,36 @@
-import React, { memo, useEffect, useRef } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import { NodeProps } from 'reactflow';
+import AutoSizeLabel from './AutoSizeLabel';
+import AutoSizeTextarea from './AutoSizeTextarea';
 
 interface EventStormingNodeData {
   label: string;
+  defaultLabel?: string; // Lưu tên mặc định của node
   icon: string;
   color: string;
   textColor: string;
   nodeType?: string;
+  onLabelChange?: (id: string, newLabel: string) => void;
+  isEdited?: boolean; // Đánh dấu node đã được chỉnh sửa
 }
 
-function EventStormingNode({ data, isConnectable, selected, id }: NodeProps<EventStormingNodeData>) {
-  // Reference to the node element
+function EventStormingNode({ data, isConnectable, selected, id }: NodeProps<EventStormingNodeData & { onLabelChange?: (id: string, label: string) => void }>) {
   const nodeRef = useRef<HTMLDivElement>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editValue, setEditValue] = useState(data.label);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  // Determine if this is a Consistent Business Rule node
+  const isWideNode = data.nodeType === "consistent-business-rule" ||
+                    data.defaultLabel === "Consistent Business Rule";
+
   
   // Scroll into view when a new node is created and selected
   useEffect(() => {
     if (selected && nodeRef.current) {
       // Add a small delay to ensure DOM is ready
       setTimeout(() => {
-        nodeRef.current?.scrollIntoView({ 
+        nodeRef.current?.scrollIntoView({
           behavior: 'smooth',
           block: 'center',
           inline: 'center'
@@ -26,10 +38,6 @@ function EventStormingNode({ data, isConnectable, selected, id }: NodeProps<Even
       }, 50);
     }
   }, [selected]);
-
-  // Determine if this is a Consistent Business Rule node
-  const isWideNode = data.label === "Consistent Business Rule" || 
-                    data.nodeType === "consistent-business-rule";
   
   return (
     <div
@@ -68,15 +76,65 @@ function EventStormingNode({ data, isConnectable, selected, id }: NodeProps<Even
         </>
       )}
 
-      <div style={{ fontSize: '26px', marginBottom: '5px' }}>{data.icon}</div>
-      <div style={{ 
-        textAlign: 'center', 
-        fontWeight: 500,
-        wordWrap: 'break-word',
-        maxWidth: isWideNode ? '220px' : '100px' 
-      }}>
-        {data.label}
-      </div>
+      {isEditing ? (
+        <AutoSizeTextarea
+          value={editValue}
+          maxWidth={isWideNode ? 220 : 100}
+          maxHeight={100}
+          textColor={data.textColor}
+          onChange={(e) => setEditValue(e.target.value)}
+          onBlur={() => {
+            const trimmedValue = editValue.trim();
+            setIsEditing(false);
+
+            if (!trimmedValue) {
+              const defaultValue = data.defaultLabel || data.label;
+              setEditValue(defaultValue);
+              if (data.onLabelChange) {
+                data.onLabelChange(id, defaultValue);
+              }
+              return;
+            }
+
+            if (trimmedValue !== data.label && data.onLabelChange) {
+              data.onLabelChange(id, trimmedValue);
+            }
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              const trimmedValue = editValue.trim();
+              setIsEditing(false);
+              
+              if (!trimmedValue) {
+                setEditValue(data.label);
+                return;
+              }
+
+              if (trimmedValue !== data.label && data.onLabelChange) {
+                data.onLabelChange(id, trimmedValue);
+              }
+            }
+            if (e.key === 'Escape') {
+              setEditValue(data.label);
+              setIsEditing(false);
+            }
+          }}
+        />
+      ) : (
+        <>
+          {!data.isEdited && <div style={{ fontSize: '26px', marginBottom: '5px' }}>{data.icon}</div>}
+          <AutoSizeLabel
+            text={data.label}
+            maxWidth={isWideNode ? 220 : 100}
+            maxHeight={data.isEdited ? 110 : 80}
+            onDoubleClick={() => {
+              setIsEditing(true);
+              setEditValue(data.label);
+            }}
+          />
+        </>
+      )}
     </div>
   );
 }

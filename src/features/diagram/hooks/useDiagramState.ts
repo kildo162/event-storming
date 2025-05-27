@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Node, Edge } from 'reactflow';
 import { saveToLocalStorage, loadFromLocalStorage } from '../../../utils/localStorage';
 import { useHistoryState } from './useHistoryState';
-import { useNodeOperations } from '../hooks/useNodeOperations';
-import { useGroupOperations } from '../hooks/useGroupOperations';
+import { useNodeOperations } from './useNodeOperations';
+import { useGroupOperations } from './useGroupOperations';
+import { useGroupNodeSync } from './useGroupNodeSync';
 
 const STORAGE_KEY = 'event-storming-diagram';
 
@@ -44,6 +45,27 @@ export function useDiagramState() {
     nodeIdCounter: 1
   });
 
+  const { syncGroupNodes } = useGroupNodeSync();
+
+  // Sync sau khi undo/redo
+  const handleHistoryUpdate = useCallback((newNodes: Node[]) => {
+    setNodes(newNodes);
+    // Đợi một tick để đảm bảo nodes đã được cập nhật
+    setTimeout(() => syncGroupNodes(newNodes, setNodes), 0);
+  }, [syncGroupNodes]);
+
+  // Wrap setNodes để tự động sync group nodes
+  const wrappedSetNodes = useCallback((updatedNodes: Node[] | ((prev: Node[]) => Node[])) => {
+    setNodes(prev => {
+      const newNodes = typeof updatedNodes === 'function' ? updatedNodes(prev) : updatedNodes;
+      // Chỉ sync khi không phải là thao tác history
+      if (!isHistoryActionRef.current) {
+        setTimeout(() => syncGroupNodes(newNodes, setNodes), 0);
+      }
+      return newNodes;
+    });
+  }, [syncGroupNodes]);
+
   // Load from localStorage on mount
   useEffect(() => {
     try {
@@ -83,13 +105,30 @@ export function useDiagramState() {
 
   // Node operations
   const nodeOps = useNodeOperations({
-    nodes, setNodes, edges, setEdges, nodeIdCounter, setNodeIdCounter,
-    isHistoryActionRef, isDraggingRef, pushHistory, history, canUndo, canRedo, undoHistory, redoHistory, resetHistory
+    nodes,
+    setNodes: wrappedSetNodes,
+    edges,
+    setEdges,
+    nodeIdCounter,
+    setNodeIdCounter,
+    isHistoryActionRef,
+    isDraggingRef,
+    pushHistory,
+    history,
+    canUndo,
+    canRedo,
+    undoHistory,
+    redoHistory,
+    resetHistory
   });
 
   // Group operations
   const groupOps = useGroupOperations({
-    nodes, setNodes, nodeIdCounter, setNodeIdCounter, pushHistory
+    nodes,
+    setNodes: wrappedSetNodes,
+    nodeIdCounter,
+    setNodeIdCounter,
+    pushHistory
   });
 
   // Save diagram
@@ -108,6 +147,36 @@ export function useDiagramState() {
     }
   };
 
+  // Override history operations to handle group syncing
+  const historyOperations = {
+    undo: useCallback(() => {
+      isHistoryActionRef.current = true;
+      undoHistory();
+      const newState = history.past[history.past.length - 1];
+      if (newState) {
+        handleHistoryUpdate(newState.nodes);
+      }
+      isHistoryActionRef.current = false;
+    }, [undoHistory, history, handleHistoryUpdate]),
+
+    redo: useCallback(() => {
+      isHistoryActionRef.current = true;
+      redoHistory();
+      const newState = history.future[0];
+      if (newState) {
+        handleHistoryUpdate(newState.nodes);
+      }
+      isHistoryActionRef.current = false;
+    }, [redoHistory, history, handleHistoryUpdate]),
+
+    reset: useCallback((newState: DiagramState) => {
+      isHistoryActionRef.current = true;
+      resetHistory(newState);
+      handleHistoryUpdate(newState.nodes);
+      isHistoryActionRef.current = false;
+    }, [resetHistory, handleHistoryUpdate])
+  };
+
   return {
     nodes,
     edges,
@@ -116,6 +185,7 @@ export function useDiagramState() {
     saveDiagram,
     canUndo,
     canRedo,
-    history
+    history,
+    ...historyOperations
   };
 }

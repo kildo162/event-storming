@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDiagram } from "../features/diagram/DiagramContext";
+import { useDiagram } from "../features/diagram";
 import HistoryPanel from "./HistoryPanel";
 
 type StatusType = "ready" | "saving" | "saved";

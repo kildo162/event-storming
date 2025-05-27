@@ -125,10 +125,13 @@ export function useNodeOperations({
         type: 'eventStormingNode',
         data: {
           label: nodeConfig.name,
+          defaultLabel: nodeConfig.name,  // Lưu tên mặc định
           icon: nodeConfig.icon,
           color: nodeConfig.color,
           textColor: nodeConfig.textColor,
           nodeType: nodeType,
+          onLabelChange: updateNodeLabel,
+          isEdited: false,  // Khởi tạo chưa chỉnh sửa
         },
         position: newPosition,
         style: {
@@ -171,6 +174,13 @@ export function useNodeOperations({
         position: {
           x: node.position.x + offset.x,
           y: node.position.y + offset.y
+        },
+        data: {
+          ...node.data,
+          onLabelChange: updateNodeLabel,
+          // Giữ nguyên defaultLabel và isEdited từ node gốc
+          defaultLabel: node.data?.defaultLabel,
+          isEdited: node.data?.isEdited
         }
       };
       newNodes.push(duplicatedNode);
@@ -205,6 +215,39 @@ export function useNodeOperations({
       recordHistory(true);
     }, 0);
   }, [setNodes, setEdges, recordHistory]);
+
+  // updateNodeLabel
+  const updateNodeLabel = useCallback((nodeId: string, newLabel: string) => {
+    setNodes((prevNodes: Node[]) => {
+      const newNodes = prevNodes.map(node => {
+        if (node.id === nodeId) {
+          // Kiểm tra xem có phải đang reset về giá trị mặc định không
+          const isResettingToDefault = newLabel === node.data?.defaultLabel;
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              label: newLabel,
+              isEdited: !isResettingToDefault // Cập nhật trạng thái đã edit
+            }
+          };
+        }
+        return node;
+      });
+
+      if (!isHistoryActionRef.current) {
+        setTimeout(() => {
+          pushHistory({
+            nodes: newNodes,
+            edges,
+            nodeIdCounter
+          });
+        }, 0);
+      }
+
+      return newNodes;
+    });
+  }, [edges, nodeIdCounter, pushHistory, isHistoryActionRef]);
 
   // updateNodePositions
   const updateNodePositions = useCallback((updates: { id: string; position: { x: number; y: number } }[]) => {
@@ -293,5 +336,6 @@ export function useNodeOperations({
     undo,
     redo,
     clearCanvas,
+    updateNodeLabel,
   };
 }

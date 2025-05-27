@@ -15,8 +15,18 @@
 }
 
 /* Selected node styling */
+/* Base z-index for nodes */
+.react-flow__node {
+  z-index: 1;
+}
+
 .event-storming-node.selected {
-  z-index: 10; /* Bring selected nodes to front */
+  z-index: 2; /* Bring selected nodes to front */
+}
+
+/* Ensure handles are always clickable */
+.react-flow__handle {
+  z-index: 3;
 }
 
 /* Selection indicators - the V shapes at corners */
@@ -65,25 +75,26 @@
 
 /* Group node styling */
 .group-node {
-  min-width: 150px;
-  min-height: 150px;
-  transition: all 0.2s ease;
+  min-width: 180px;
+  min-height: 140px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: move;
-  z-index: 0; /* Place groups behind normal nodes */
+  z-index: -1; /* Place groups behind normal nodes */
   border-width: 2px !important;
   border-style: dashed !important;
   /* Make dashes more sparse */
-  border-image: repeating-linear-gradient(to right, 
-    currentColor 0%, 
-    currentColor 50%, 
-    transparent 50%, 
-    transparent 100%) 
-    5 / 10px / 0 round;
+  border-image: repeating-linear-gradient(to right,
+    currentColor 0%,
+    currentColor 50%,
+    transparent 50%,
+    transparent 100%)
+    5 / 15px / 0 round;  /* Increased dash size */
 }
 
 .group-node.selected {
-  z-index: 5; /* Bring selected groups above other groups but below normal nodes */
-  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.5);
+  z-index: -1; /* Keep groups behind normal nodes even when selected */
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.5),
+              0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 /* Connection handles */

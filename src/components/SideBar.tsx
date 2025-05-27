@@ -1,5 +1,5 @@
 import React from "react";
-import { useDiagram } from "../features/diagram/DiagramContext";
+import { useDiagram } from "../features/diagram";
 
 // Các shape theo nhóm như trong overview.md kèm màu sắc
 const masterShapes = [

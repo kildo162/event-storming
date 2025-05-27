@@ -4,7 +4,7 @@ import HeaderBar from "./components/HeaderBar";
 import StatusBar from "./components/StatusBar";
 import React, { useState } from "react";
 import { useTheme } from "./features/theme/useTheme";
-import { DiagramProvider } from "./features/diagram/DiagramContext";
+import { DiagramProvider } from "./features/diagram";
 import { ReactFlowProvider } from "reactflow";
 
 type StatusType = "ready" | "saving" | "saved";
