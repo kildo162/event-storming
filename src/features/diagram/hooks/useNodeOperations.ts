@@ -97,7 +97,7 @@ export function useNodeOperations({
         const selectedNode = selectedNodes[selectedNodes.length - 1];
         const isWideNode = selectedNode.type === 'eventStormingNode' &&
           (selectedNode.data?.nodeType === 'consistent-business-rule' ||
-            selectedNode.data?.label === 'Consistent Business Rule');
+            selectedNode.data?.defaultLabel === 'Consistent Business Rule');
         const selectedNodeWidth = isWideNode ? 240 : 120;
         newPosition = {
           x: selectedNode.position.x + selectedNodeWidth,
