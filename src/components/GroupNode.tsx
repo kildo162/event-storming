@@ -6,7 +6,7 @@ interface GroupNodeData {
   icon: string;
   color: string;
   textColor: string;
-  childNodeIds: string[]; // IDs of nodes contained within this group
+  childNodeIds: string[];
 }
 
 function GroupNode({ data, isConnectable, selected }: NodeProps<GroupNodeData>) {
@@ -17,10 +17,13 @@ function GroupNode({ data, isConnectable, selected }: NodeProps<GroupNodeData>) 
         background: 'transparent',
         border: `2px dashed ${data.color}`,
         borderRadius: '8px',
-        padding: '8px', // 8px padding around contained nodes
+        padding: '8px',
         position: 'relative',
-        minWidth: '150px',
-        minHeight: '150px',
+        minWidth: 150,
+        minHeight: 150,
+        width: 150,
+        height: 150,
+        boxSizing: 'border-box',
       }}
     >
       {/* Selection indicators - only show when selected */}
