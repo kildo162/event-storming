@@ -20,13 +20,20 @@ const AutoSizeLabel = memo(({ text, maxWidth, maxHeight, onDoubleClick }: AutoSi
   return (
     <div
       style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         textAlign: 'center',
         fontWeight: 500,
         wordWrap: 'break-word',
         fontSize: `${fontSize}px`,
         width: '100%',
+        height: '100%',
+        padding: '8px 12px',
         cursor: 'text',
-        transition: 'font-size 0.2s ease'
+        transition: 'font-size 0.2s ease',
+        lineHeight: '1.3',
+        whiteSpace: 'pre-wrap'
       }}
       onDoubleClick={onDoubleClick}
     >

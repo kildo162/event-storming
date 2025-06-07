@@ -3,9 +3,9 @@ import { useDiagram } from "../features/diagram";
 
 // Các shape theo nhóm như trong overview.md kèm màu sắc
 const masterShapes = [
-  { name: "Actor", icon: "👤", color: "#ffd100" }, // màu vàng
-  { name: "Action", icon: "⚡", color: "#36b4ff" }, // màu xanh da trời
-  { name: "Read Model", icon: "📄", color: "#66cc66" }, // màu xanh lá
+  { name: "Actor", icon: "👤", color: "#fff3b0" }, // màu vàng nhạt
+  { name: "Action", icon: "⚡", color: "#c2f0c2" }, // màu xanh nõn chuối
+  { name: "Read Model", icon: "📄", color: "#b3e0ff" }, // màu xanh nước biển nhạt
   { name: "Consistent Business Rule", icon: "✅", color: "#aa55ff" }, // màu tím
   { name: "Domain Event", icon: "📢", color: "#ff8e50" }, // màu cam
 ];

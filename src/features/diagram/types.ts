@@ -19,4 +19,5 @@ export interface DiagramContextProps {
   deleteSelectedNodes: (nodes: Node[]) => void;
   duplicateSelectedNodes: (nodes: Node[]) => string[] | undefined;
   createBehaviorGroup: () => string | null;
+  updateNodeLabel: (nodeId: string, newLabel: string) => void;
 }

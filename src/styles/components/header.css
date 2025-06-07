@@ -1,14 +1,14 @@
 /* Header bar styles */
 .header-bar {
-  height: 54px;
-  min-height: 54px;
-  max-height: 54px;
-  flex: 0 0 54px; /* Fixed height */
+  height: 48px;
+  min-height: 48px;
+  max-height: 48px;
+  flex: 0 0 48px; /* Fixed height */
   background: #23272f;
   color: #fff;
   display: flex;
   align-items: center;
-  padding: 0 18px;
+  padding: 0 16px;
   font-size: 1.08rem;
   font-weight: 500;
   border-bottom: 1.5px solid #d1d5db;
@@ -29,9 +29,9 @@
   background: #31363f;
   color: #fff;
   border: none;
-  border-radius: 50%;
-  width: 38px;
-  height: 38px;
+  border-radius: 6px;
+  width: 34px;
+  height: 34px;
   font-size: 1.25rem;
   font-weight: 500;
   cursor: pointer;
@@ -51,7 +51,7 @@
 .header-icon-btn::after {
   content: attr(title);
   position: absolute;
-  bottom: -35px;
+  bottom: -32px;
   left: 50%;
   transform: translateX(-50%);
   background-color: rgba(0, 0, 0, 0.8);

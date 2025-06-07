@@ -36,10 +36,14 @@ const AutoSizeTextarea = memo(({
         onBlur={onBlur}
         onKeyDown={onKeyDown}
         style={{
-          width: 'calc(100% - 16px)',
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 'calc(100% - 24px)',
           height: 'calc(100% - 16px)',
-          margin: '8px',
-          padding: '8px',
+          margin: 0,
+          padding: '8px 12px',
           background: 'rgba(255, 255, 255, 0.1)',
           border: 'none',
           borderRadius: '4px',
@@ -50,7 +54,9 @@ const AutoSizeTextarea = memo(({
           resize: 'none',
           outline: 'none',
           textAlign: 'center',
-          lineHeight: '1.2'
+          lineHeight: '1.3',
+          wordWrap: 'break-word',
+          whiteSpace: 'pre-wrap'
         }}
         autoFocus
       />

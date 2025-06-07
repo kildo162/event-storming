@@ -26,7 +26,8 @@ export function DiagramProvider({ children }: DiagramProviderProps) {
     selectedNodes,
     deleteSelectedNodes,
     duplicateSelectedNodes,
-    createBehaviorGroup
+    createBehaviorGroup,
+    updateNodeLabel
   } = useDiagramState();
   
   return (
@@ -47,7 +48,8 @@ export function DiagramProvider({ children }: DiagramProviderProps) {
       selectedNodes,
       deleteSelectedNodes,
       duplicateSelectedNodes,
-      createBehaviorGroup
+      createBehaviorGroup,
+      updateNodeLabel
     }}>
       {children}
     </DiagramContext.Provider>

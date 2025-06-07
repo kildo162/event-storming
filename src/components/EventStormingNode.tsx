@@ -2,6 +2,7 @@ import React, { memo, useEffect, useRef, useState } from 'react';
 import { NodeProps } from 'reactflow';
 import AutoSizeLabel from './AutoSizeLabel';
 import AutoSizeTextarea from './AutoSizeTextarea';
+import { useDiagram } from '../features/diagram';
 
 interface EventStormingNodeData {
   label: string;
@@ -14,11 +15,12 @@ interface EventStormingNodeData {
   isEdited?: boolean; // Đánh dấu node đã được chỉnh sửa
 }
 
-function EventStormingNode({ data, isConnectable, selected, id }: NodeProps<EventStormingNodeData & { onLabelChange?: (id: string, label: string) => void }>) {
+function EventStormingNode({ data, isConnectable, selected, id }: NodeProps<EventStormingNodeData>) {
   const nodeRef = useRef<HTMLDivElement>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(data.label);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const { updateNodeLabel } = useDiagram();
 
   // Determine if this is a Consistent Business Rule node
   const isWideNode = data.nodeType === "consistent-business-rule" ||
@@ -87,17 +89,14 @@ function EventStormingNode({ data, isConnectable, selected, id }: NodeProps<Even
             const trimmedValue = editValue.trim();
             setIsEditing(false);
 
+            // Always update the label when exiting edit mode
             if (!trimmedValue) {
               const defaultValue = data.defaultLabel || data.label;
               setEditValue(defaultValue);
-              if (data.onLabelChange) {
-                data.onLabelChange(id, defaultValue);
-              }
-              return;
-            }
-
-            if (trimmedValue !== data.label && data.onLabelChange) {
-              data.onLabelChange(id, trimmedValue);
+              updateNodeLabel(id, defaultValue);
+            } else {
+              // Update even if text hasn't changed, to ensure saving
+              updateNodeLabel(id, trimmedValue);
             }
           }}
           onKeyDown={(e) => {
@@ -106,16 +105,17 @@ function EventStormingNode({ data, isConnectable, selected, id }: NodeProps<Even
               const trimmedValue = editValue.trim();
               setIsEditing(false);
               
+              // Always save on Enter
               if (!trimmedValue) {
-                setEditValue(data.label);
-                return;
-              }
-
-              if (trimmedValue !== data.label && data.onLabelChange) {
-                data.onLabelChange(id, trimmedValue);
+                const defaultValue = data.defaultLabel || data.label;
+                setEditValue(defaultValue);
+                updateNodeLabel(id, defaultValue);
+              } else {
+                updateNodeLabel(id, trimmedValue);
               }
             }
             if (e.key === 'Escape') {
+              // Revert changes on Escape
               setEditValue(data.label);
               setIsEditing(false);
             }
